@@ -122,3 +122,15 @@ for (var i = 0; i < dependencyScanQueue.length; i++) {
     console.log(dependencyScanQueue[i]);
 }
 console.log('-------------END DEPENDENCIES-------------');
+
+var depsDir = path.join(__dirname, 'deps');
+if (!fs.existsSync(depsDir)) {
+    fs.mkdirSync(dir);
+}
+
+for (var i = 0; i < dependencyScanQueue.length; i++) {
+    var src = dependencyScanQueue[i];
+    var dest = path.join(depsDir, path.basename(dependencyScanQueue[i]));
+    console.log('Copy ' + src + ' => ' + dest);
+    fs.createReadStream(dependencyScanQueue[i]).pipe(path.join(depsDir, path.basename(dependencyScanQueue[i])));
+}
