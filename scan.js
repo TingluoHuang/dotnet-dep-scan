@@ -1,5 +1,6 @@
 var p = require('child_process');
 var fs = require('fs');
+var path = require('path');
 
 var wellKnownDependencies = [
     /libc\.so\.\d/gi,
@@ -17,6 +18,14 @@ var wellKnownDependencies = [
     /liblzma\.so\.5/gi,
     /libuuid\.so\.1/gi
 ];
+
+var rootDependencies = [
+    'libcoreclr.so',
+    'System.IO.Compression.Native.so',
+    'System.Net.Http.Native.so',
+    'System.Security.Cryptography.Native.OpenSsl.so'
+];
+
 var dependencyScanQueue = [];
 var currentIndex = 0;
 
@@ -76,15 +85,15 @@ var skip = function (file) {
     }
 }
 
-var args = process.argv;
-args.splice(0, 2);
-args.forEach((arg) => {
-    console.log('Scan dependencies for: ' + arg);
-    if (!fs.existsSync(arg)) {
-        throw new Error('File does not exist: ' + arg);
+
+rootDependencies.forEach((dep) => {
+    console.log('Scan dependencies for: ' + dep);
+    dep = path.join(__dirname, dep);
+    if (!fs.existsSync(dep)) {
+        throw new Error('File does not exist: ' + dep);
     }
 
-    var ret = ldd(arg);
+    var ret = ldd(dep);
     ret.forEach((d) => {
         dependencyScanQueue.push(d);
     });
