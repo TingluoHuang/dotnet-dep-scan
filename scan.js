@@ -132,5 +132,5 @@ for (var i = 0; i < dependencyScanQueue.length; i++) {
     var src = dependencyScanQueue[i];
     var dest = path.join(depsDir, path.basename(dependencyScanQueue[i]));
     console.log('Copy ' + src + ' => ' + dest);
-    fs.createReadStream(dependencyScanQueue[i]).pipe(path.join(depsDir, path.basename(dependencyScanQueue[i])));
+    fs.createReadStream(src).pipe(fs.createWriteStream(dest));
 }
