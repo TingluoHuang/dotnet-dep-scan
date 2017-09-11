@@ -52,10 +52,13 @@ var ldd = function (file) {
         // linux-vdso.so.1 =>
         // libdl.so.2 => /lib64/libdl.so.2
         // /lib64/ld-linux-x86-64.so.2
+        // libunwind-x86_64.so.8 => not found
         if (dep_path.indexOf('=>') != -1) {
             var splited = dep_path.split('=>', 2);
             if (splited[1].length == 0) {
                 console.log('Skip kernel library: ' + dep_path);
+            } else if (splited[1].toLowerCase().indexOf('not found') != -1) {
+                throw new Error(`The following library is not found: '${splited[0]}'`);
             } else {
                 dep = splited[0].trim();
                 path = splited[1].trim();
