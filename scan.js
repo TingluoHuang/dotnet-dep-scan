@@ -125,7 +125,7 @@ console.log('-------------END DEPENDENCIES-------------');
 
 var depsDir = path.join(__dirname, 'deps');
 if (!fs.existsSync(depsDir)) {
-    fs.mkdirSync(dir);
+    fs.mkdirSync(depsDir);
 }
 
 for (var i = 0; i < dependencyScanQueue.length; i++) {
