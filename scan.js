@@ -89,6 +89,41 @@ var skip = function (file) {
     }
 }
 
+var locate = function (file) {
+    var cl = `locate "${file}"`;
+    var output;
+    try {
+        output = p.execSync(cl);
+    }
+    catch (err) {
+        throw new Error(`The following command line failed: '${cl}'`);
+    }
+
+    output = (output || '').toString().trim();
+
+    var outputs = output.split("\n");
+    var locations = [];
+    for (var i = 0; i < outputs.length; i++) {
+        var location = outputs[i].trim();
+        console.log(location);
+
+        // check location is for a major version
+        // regex /file\.[0-9]+$/
+        var regex = new RegExp(file.replace('.', '\\.') + '\.[0-9]+$', 'gi');
+        var matched = location.match(regex);
+        if (matched) {
+            locations.push(location);
+        } else {
+            console.log('\'' + location + '\' is not a major version.');
+        }
+    }
+
+    if (locations.length = 0) {
+        throw new Error(`Can not find a major version for ${file}`);
+    }
+
+    return locations;
+}
 
 rootDependencies.forEach((dep) => {
     console.log('Scan dependencies for: ' + dep);
@@ -117,6 +152,22 @@ while (currentIndex < dependencyScanQueue.length) {
 
     currentIndex++;
 }
+
+var icuuc = locate('libicuuc.so');
+var icui18n = locate('libicui18n.so');
+var icudata = locate('libicudata.so');
+
+icuuc.forEach((icu) => {
+    dependencyScanQueue.push(icu);
+});
+
+icui18n.forEach((icu) => {
+    dependencyScanQueue.push(icu);
+});
+
+icui18n.forEach((icu) => {
+    dependencyScanQueue.push(icu);
+});
 
 console.log('-------------BEGIN DEPENDENCIES-------------');
 for (var i = 0; i < dependencyScanQueue.length; i++) {
