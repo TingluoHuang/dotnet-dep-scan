@@ -90,7 +90,7 @@ var skip = function (file) {
 }
 
 var locate = function (file) {
-    var cl = `locate "${file}"`;
+    var cl = `locate ${file}`;
     var output;
     try {
         output = p.execSync(cl);
