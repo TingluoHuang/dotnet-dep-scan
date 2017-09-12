@@ -21,6 +21,7 @@ var wellKnownDependencies = [
 
 var rootDependencies = [
     'libcoreclr.so',
+    'System.Globalization.Native.so',
     'System.IO.Compression.Native.so',
     'System.Net.Http.Native.so',
     'System.Security.Cryptography.Native.OpenSsl.so'
